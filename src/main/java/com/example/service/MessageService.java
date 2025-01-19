@@ -42,4 +42,13 @@ public class MessageService {
         this.messageRepository.deleteById(id);
         return 1;
     }
+
+    public Integer updateMessageById(Message updatedMessage, int id) throws CustomClientException {
+        Message foundMessage = this.getMessageById(id);
+        if ((foundMessage == null) || (updatedMessage.getMessageText().length() == 0) || (updatedMessage.getMessageText().length() > 255)) {
+            throw new CustomClientException();
+        }
+        this.messageRepository.save(updatedMessage);
+        return 1;
+    }
 }

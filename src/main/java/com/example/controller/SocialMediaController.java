@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -91,6 +92,12 @@ public class SocialMediaController {
     @DeleteMapping("/messages/{messageId}")
     public ResponseEntity<Integer> deleteMessageById(@PathVariable int messageId) {
         Integer rowsAffected = this.messageService.deleteMessageById(messageId);
+        return ResponseEntity.status(200).body(rowsAffected);
+    }
+
+    @PatchMapping("/messages/{messageId}")
+    public ResponseEntity<Integer> updateMessageById(@PathVariable int messageId, @RequestBody Message updatedMessage) throws CustomClientException {
+        Integer rowsAffected = this.messageService.updateMessageById(updatedMessage, messageId);
         return ResponseEntity.status(200).body(rowsAffected);
     }
 }
