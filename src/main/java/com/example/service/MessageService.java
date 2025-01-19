@@ -48,13 +48,16 @@ public class MessageService {
         Message foundMessage = this.getMessageById(id);
         if ((foundMessage == null) || (updatedMessage.getMessageText().length() == 0) || (updatedMessage.getMessageText().length() > 255)) {
             throw new CustomClientException();
+        } else {
+            foundMessage.setMessageText(updatedMessage.getMessageText());
+            foundMessage.setPostedBy(updatedMessage.getPostedBy());
+            foundMessage.setTimePostedEpoch(updatedMessage.getTimePostedEpoch());
+            this.messageRepository.save(foundMessage);
+            return 1;
         }
-        this.messageRepository.save(updatedMessage);
-        return 1;
     }
 
     public List<Message> getAllMessagesById(int id) {
-        Iterable<Integer> iterable = Arrays.asList(id);
-        return this.messageRepository.findAllById(iterable);
+        return this.messageRepository.findAllByMessageId(id);
     }
 }
