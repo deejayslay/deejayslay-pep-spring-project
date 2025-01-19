@@ -32,4 +32,14 @@ public class MessageService {
     public Message getMessageById(int id) {
         return this.messageRepository.findById(id).orElse(null);
     }
+
+    // returns number of rows affected; 1 if message deleted, null if message id not found
+    public Integer deleteMessageById(int id) {
+        Message foundMessage = this.getMessageById(id);
+        if (foundMessage == null) {
+            return null;
+        }
+        this.messageRepository.deleteById(id);
+        return 1;
+    }
 }
