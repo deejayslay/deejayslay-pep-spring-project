@@ -12,6 +12,7 @@ import com.example.repository.AccountRepository;
 
 @Service
 public class AccountService {
+
     private AccountRepository accountRepository;
 
     @Autowired
@@ -41,10 +42,7 @@ public class AccountService {
 
     public Account loginAccount(Account account) throws AccountNotAuthorizedException {
         Account foundAccount = this.getAccountByUsername(account.getUsername());
-        if (foundAccount == null) {
-            throw new AccountNotAuthorizedException();
-        }
-        if (!foundAccount.getPassword().equals(account.getPassword())) {
+        if ((foundAccount == null) ||  (!foundAccount.getPassword().equals(account.getPassword()))){
             throw new AccountNotAuthorizedException();
         }
         return foundAccount;

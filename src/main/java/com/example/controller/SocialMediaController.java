@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Account;
@@ -99,5 +98,11 @@ public class SocialMediaController {
     public ResponseEntity<Integer> updateMessageById(@PathVariable int messageId, @RequestBody Message updatedMessage) throws CustomClientException {
         Integer rowsAffected = this.messageService.updateMessageById(updatedMessage, messageId);
         return ResponseEntity.status(200).body(rowsAffected);
+    }
+
+    @GetMapping("/accounts/{accountId}/messages")
+    public ResponseEntity<List<Message>> getAllMessagesById(@PathVariable int accountId) {
+        List<Message> messages = this.messageService.getAllMessagesById(accountId);
+        return ResponseEntity.status(200).body(messages);
     }
 }

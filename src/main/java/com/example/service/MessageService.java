@@ -1,5 +1,6 @@
 package com.example.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,10 @@ public class MessageService {
         }
         this.messageRepository.save(updatedMessage);
         return 1;
+    }
+
+    public List<Message> getAllMessagesById(int id) {
+        Iterable<Integer> iterable = Arrays.asList(id);
+        return this.messageRepository.findAllById(iterable);
     }
 }
