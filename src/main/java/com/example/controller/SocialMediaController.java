@@ -1,8 +1,11 @@
 package com.example.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,13 +37,14 @@ public class SocialMediaController {
         this.messageService = messageService;
     }
 
+    // exception handlers
     @ExceptionHandler(DuplicateUsernameException.class)
     public ResponseEntity<String> handleDuplicateUsernameException(DuplicateUsernameException ex) {
         return ResponseEntity.status(409).build();
     }
 
     @ExceptionHandler(AccountNotAuthorizedException.class)
-    public ResponseEntity<String> handleAaccountNotAuthorizedException(DuplicateUsernameException ex) {
+    public ResponseEntity<String> handleAaccountNotAuthorizedException(AccountNotAuthorizedException ex) {
         return ResponseEntity.status(401).build();
     }
 
@@ -49,6 +53,7 @@ public class SocialMediaController {
         return ResponseEntity.status(400).build();
     }
 
+    // REST mappings
     @PostMapping("/register")
     public ResponseEntity<Account> postAccount(@RequestBody Account account) throws DuplicateUsernameException, CustomClientException {
         Account newAccount = this.accountService.registerAccount(account);
@@ -58,9 +63,6 @@ public class SocialMediaController {
     @PostMapping("/login")
     public ResponseEntity<Account> loginAccount(@RequestBody Account account) throws AccountNotAuthorizedException {
         Account loggedInAccount = this.accountService.loginAccount(account);
-        if (loggedInAccount == null) {
-            return ResponseEntity.status(401).build();
-        }
         return ResponseEntity.status(200).body(loggedInAccount);
     }
 
@@ -70,5 +72,11 @@ public class SocialMediaController {
         this.accountService.getAccountById(message.getPostedBy());
         Message newMessage = this.messageService.createMessage(message);
         return ResponseEntity.status(200).body(newMessage);
+    }
+
+    @GetMapping("/messages")
+    public ResponseEntity<List<Message>> getAllMessages() {
+        List<Message> messages = this.messageService.getAllMessages();
+        return ResponseEntity.status(200).body(messages);
     }
 }
